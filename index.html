@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>设总工作台 · 雷达 / 节点 / 防坑 / 归档</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="top">
+  <div class="top-in">
+    <div class="brand">
+      <h1>设总工作台</h1>
+      <p>今日雷达 · 项目节点掌控 · 设总防坑 · 归档复盘　—　不放软件图标，不做每日打卡</p>
+    </div>
+    <span class="sp"></span>
+    <div class="sync" id="syncTag"><i class="dot"></i><span id="syncText">连接中</span></div>
+    <button class="btn" id="btnExport" type="button">导出备份</button>
+    <button class="btn" id="btnRefresh" type="button">刷新</button>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <section class="sec">
+    <div class="sec-head">
+      <span class="sec-no">01</span>
+      <h2>我的今日雷达</h2>
+      <span class="hint">只放最紧急的 · 逾期自动置顶 · 唯一保留勾选</span>
+      <span class="sp"></span>
+      <button class="btn" id="btnAdd" type="button">＋ 新增</button>
+      <span class="cnt" id="radarCnt"></span>
+    </div>
+    <div class="handoff" id="radarBox"></div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-head">
+      <span class="sec-no">02</span>
+      <h2>项目节点掌控</h2>
+      <span class="hint">业务流 SOP · 模板与清单直接取用，不打卡</span>
+      <span class="sp"></span>
+      <span class="cnt" id="phaseCnt"></span>
+    </div>
+    <div class="zones">
+      <article class="zone">
+        <div class="zone-h"><span class="zn">A</span><h3>前期方案强排</h3><span class="sp"></span><span class="cnt" data-zone-cnt="前期方案强排"></span><button class="zone-add" data-zone="前期方案强排" type="button" aria-label="新增到前期方案强排">＋</button></div>
+        <div class="zone-b" id="zone-前期方案强排"></div>
+      </article>
+      <article class="zone">
+        <div class="zone-h"><span class="zn">B</span><h3>投标项目</h3><span class="sp"></span><span class="cnt" data-zone-cnt="投标项目"></span><button class="zone-add" data-zone="投标项目" type="button" aria-label="新增到投标项目">＋</button></div>
+        <div class="zone-b" id="zone-投标项目"></div>
+      </article>
+      <article class="zone">
+        <div class="zone-h"><span class="zn">C</span><h3>项目报规</h3><span class="sp"></span><span class="cnt" data-zone-cnt="项目报规"></span><button class="zone-add" data-zone="项目报规" type="button" aria-label="新增到项目报规">＋</button></div>
+        <div class="zone-b" id="zone-项目报规"></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-head">
+      <span class="sec-no">03</span>
+      <h2>设总防坑清单</h2>
+      <span class="hint">置顶警示 · 只读，不打卡</span>
+      <span class="sp"></span>
+      <button class="btn" id="btnAddTrap" type="button">＋ 新增条目</button>
+      <span class="cnt" id="trapCnt"></span>
+    </div>
+    <div class="traps" id="trapBox"></div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-head">
+      <span class="sec-no">04</span>
+      <h2>归档与复盘</h2>
+      <span class="hint">项目结束不是终点 · 经验回填，防坑清单才越来越厚</span>
+      <span class="sp"></span>
+      <button class="btn" id="btnAddArc" type="button">＋ 新增</button>
+      <span class="cnt" id="arcCnt"></span>
+    </div>
+    <div class="arch-note">
+      做这么多项目，最大的财富是经验。<b>每个项目收尾时往台账里写三行</b>——报规被卡了什么、投标输在哪、强排哪里返工了；下一个项目开工前翻一遍，同样的坑不用踩第二次。
+    </div>
+    <div class="handoff" id="arcBox"></div>
+  </section>
+
+  <div class="foot">
+    <span>共 <code id="footCnt">—</code> 条　·　路径根 <code>D:/_项目管控/</code>，归档在 <code>04_归档/</code>，换成你的实际位置即可</span>
+    <span>静态快照版 · 数据截至 2026-11-18 · 改动只存本机　<a href="#" id="btnReset">恢复为快照</a></span>
+  </div>
+</div>
+
+<div class="mask" id="mask" hidden>
+  <div class="dlg">
+    <h4 id="dlgTitle">编辑条目</h4>
+    <div class="fld"><label>名称</label><input id="fName" type="text" maxlength="40"></div>
+    <div class="fld"><label>说明（一句话，写清楚装的是什么）</label><textarea id="fDesc" rows="2" maxlength="120"></textarea></div>
+    <div class="fld"><label>链接或路径（本地路径 / 网址，留空则不显示）</label><input id="fPath" type="text" maxlength="200"></div>
+    <div class="dlg-act">
+      <button class="btn danger" id="btnDelete" type="button">删除条目</button>
+      <span class="del-sp"></span>
+      <button class="btn" id="btnCancel" type="button">取消</button>
+      <button class="btn primary" id="btnSave" type="button">保存</button>
+    </div>
+  </div>
+</div>
+
+<div class="mask" id="mask2" hidden>
+  <div class="dlg">
+    <h4>新增待办</h4>
+    <div class="fld"><label>事项（要催谁 / 等什么）</label><input id="aName" type="text" maxlength="40" placeholder="例：催结构反提资"></div>
+    <div class="fld"><label>说明（卡在哪个环节、没回怎么推）</label><textarea id="aDesc" rows="2" maxlength="120" placeholder="例：反提资到齐再动总图；当天没回就电话确认"></textarea></div>
+    <div class="fld"><label>等谁（专业 / 单位）</label><input id="aOwner" type="text" maxlength="20" value="机电 / 结构"></div>
+    <div class="fld"><label>截止日期（留空则不催办）</label><input id="aDue" type="date"></div>
+    <div class="dlg-act">
+      <button class="btn" id="aCancel" type="button">取消</button>
+      <button class="btn primary" id="aSave" type="button">加入雷达</button>
+    </div>
+  </div>
+</div>
+
+<div class="mask" id="mask3" hidden>
+  <div class="dlg">
+    <h4 id="t3Title">新增防坑条目</h4>
+    <div class="fld"><label>标题</label><input id="t3Name" type="text" maxlength="40"></div>
+    <div class="fld"><label>内容（一句话说清这条经验 / 这个做法）</label><textarea id="t3Desc" rows="3" maxlength="160"></textarea></div>
+    <div class="fld"><label>放置形式</label>
+      <select id="t3Kind">
+        <option value="实体/线下">实体 / 线下（白板、纸质卡、便签）</option>
+        <option value="提醒">警示提醒（一句话的坑）</option>
+        <option value="链接">链接 / 文件路径</option>
+        <option value="模板">模板</option>
+        <option value="表格">表格</option>
+      </select>
+    </div>
+    <div class="fld"><label>链接或路径（可留空；实体形式就写在哪块板）</label><input id="t3Path" type="text" maxlength="200"></div>
+    <div class="dlg-act">
+      <button class="btn" id="t3Cancel" type="button">取消</button>
+      <button class="btn primary" id="t3Save" type="button">加入</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
